@@ -12,5 +12,6 @@ public class Main {
                 .start(7000);
 
         Init.intAlumnos().register(app);
+        Init.initUsuarios().register(app);
     }
 }

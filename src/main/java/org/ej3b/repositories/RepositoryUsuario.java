@@ -21,14 +21,14 @@ public class RepositoryUsuario {
                 Usuarios user = new Usuarios();
                 user.setId(rs.getInt("id"));
                 user.setNom(rs.getString("nom"));
-                user.setPwsd(rs.getString("pwsd"));
+                user.setPwsd(rs.getString("pswd"));
                 return user;
             }
         }
         return null;
     }
     public void save(Usuarios u)throws SQLException{
-        String sql = "INSERT INTO usuarios (nom,pwsd) VALUES (?,?)";
+        String sql = "INSERT INTO usuarios (nom,pswd) VALUES (?,?)";
         try(Connection conn = DBConfig.getDataSource(). getConnection();
             PreparedStatement stmt =conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);){
             stmt.setString(1,u.getNom());

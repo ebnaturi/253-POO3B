@@ -31,7 +31,9 @@ public class UsuarioController {
                     "message","Usuario registrado correctamente"
             ));
         } catch (SQLException e) {
-            ctx.status(500).result("Error al registrar el usuario");
+            ctx.status(500).result("Error al registrar el usuario" +e.getMessage());
+        } catch (Exception e) {
+            ctx.status(500).result(e.getMessage());
         }
     }
 
