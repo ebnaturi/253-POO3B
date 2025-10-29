@@ -3,15 +3,17 @@ package org.ej3b.config;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import javax.sql.DataSource;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class DBConfig {
     private static HikariDataSource dataSource;
     public static DataSource getDataSource() {
         if (dataSource == null) {
-            String host = "localhost";
-            String dbName="pruebas3b";
-            String user="root";
-            String password="";
+            Dotenv dotenv = Dotenv.load();
+            String host = dotenv.get("DB_HOST");
+            String dbName=dotenv.get("DB_SCHEMA");
+            String user=dotenv.get("DB_USER");
+            String password=dotenv.get("DB_PASS");
             String url = "jdbc:mysql://" + host + ":3306/" + dbName;
 
             HikariConfig config = new HikariConfig();
