@@ -1,6 +1,7 @@
 package org.ej3b.config;
 
 import org.ej3b.controllers.ControllerAlumno;
+import org.ej3b.controllers.JwtMiddleware;
 import org.ej3b.controllers.TokenManager;
 import org.ej3b.controllers.UsuarioController;
 import org.ej3b.repositories.RepositoryUsuario;
@@ -24,8 +25,9 @@ public class Init {
         RepositoryUsuario repositoryUsuario = new RepositoryUsuario();
         UsuarioService usuarioService = new UsuarioService(repositoryUsuario);
         TokenManager tokenManager = new TokenManager();
+        JwtMiddleware jwtMiddleware = new JwtMiddleware(tokenManager);
         UsuarioController usuarioController = new UsuarioController(usuarioService,tokenManager);
-        UsuarioRouter usuarioRouter = new UsuarioRouter(usuarioController);
+        UsuarioRouter usuarioRouter = new UsuarioRouter(usuarioController,jwtMiddleware);
         return usuarioRouter;
 
     }

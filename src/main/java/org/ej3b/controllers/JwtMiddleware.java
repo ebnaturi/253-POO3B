@@ -3,6 +3,7 @@ package org.ej3b.controllers;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import java.util.Map;
+import io.javalin.http.UnauthorizedResponse;
 public class JwtMiddleware {
     private final TokenManager tokenManager;
 
@@ -11,7 +12,9 @@ public class JwtMiddleware {
     }
 
     public void apply(Javalin app) {
-        app.before("/api/protected/*", this::validateJwt);
+        //app.before("/api/protected/*", this::validateJwt);
+        app.before("/alumnos", this::validateJwt);
+        app.before("/alumnos/*", this::validateJwt);
     }
 
     private void validateJwt(Context ctx) {
@@ -23,14 +26,15 @@ public class JwtMiddleware {
             ctx.status(401).json(Map.of(
                     "error", "Authorization header faltante o malformado"
             ));
-            return;
+            System.out.println("Authorization header faltante o malformado");
+            throw  new UnauthorizedResponse("Authorization header faltante o malformado");
         }
 
         if (userId == null) {
             ctx.status(401).json(Map.of(
                     "error", "User-Id header requerido"
             ));
-            return;
+            throw  new UnauthorizedResponse("Authorization  User-Id header requerido");
         }
 
         // Extraer el token
@@ -42,13 +46,22 @@ public class JwtMiddleware {
                 ctx.status(403).json(Map.of(
                         "error", "Token inválido o expirado"
                 ));
+                throw  new UnauthorizedResponse("Authorization: Token inválido o expirado");
             }
             // Token válido - la solicitud continúa
         } catch (Exception e) {
             ctx.status(401).json(Map.of(
                     "error", "Error al validar el token"
             ));
+            throw  new UnauthorizedResponse("Error al validar el token");
         }
     }
+
+    public void noautorizado(UnauthorizedResponse e, Context ctx){
+        ctx.status(401).json(Map.of(
+                "error", "No autorizado" + e.getMessage()
+        ));
+    }
+
 }
 
